@@ -188,10 +188,10 @@ class DataHandler(mp.ModelParameter):
                 if i > j*len(files)/100:
                     print('Parsed ' + str(j) + '%')
                     j+=10
-                traj = self.parse_trajectory(os.path.join(directory, file))
+                traj,label = self.parse_trajectory(os.path.join(directory, file))
                 all_data = np.vstack((all_data,traj))
                 for step in traj:
-                    all_labels = np.hstack((all_labels,np.array(goal)))
+                    all_labels = np.hstack((all_labels,np.array(label)))
         else:
             # Parse data and labels
             for file in files:
@@ -199,11 +199,11 @@ class DataHandler(mp.ModelParameter):
                 if i > j*len(files)/100:
                     print('Parsed ' + str(j) + '%')
                     j+=10
-                query_state, goal = self.parse_query_state(os.path.join(directory, file),\
+                query_state, label = self.parse_query_state(os.path.join(directory, file),\
                                                            with_label)
                 #pdb.set_trace()
                 all_data = np.vstack((all_data,query_state))
-                all_labels = np.hstack((all_labels,np.array(goal)))
+                all_labels = np.hstack((all_labels,np.array(label)))
             #pdb.set_trace()
         print('Parsed ' + str(j) + '%')
 
@@ -250,7 +250,7 @@ class DataHandler(mp.ModelParameter):
         #self.parse_query_state(filename)
 
         steps = []
-        #output.shape(12, 12, 11, 10)
+        #output.shape(12, 12, 31, 10)
         output = np.zeros((self.MAZE_WIDTH, self.MAZE_HEIGHT, self.MAZE_DEPTH_TRAJECTORY, self.MAX_TRAJECTORY_SIZE))
         #label = ''
         with open(filename) as fp:
@@ -260,9 +260,12 @@ class DataHandler(mp.ModelParameter):
             #Parse maze to 2d array, remove walls.
             i=0
             while i < 12: # in the txt file, each maze has 12 lines
-                maze[i]=maze[i][7:18]
-                #maze[i].pop(len(maze[i])-1)
+                maze[i]=maze[i][7:19]
+                maze[i]= list(maze[i])
                 i+=1
+
+                #maze[i].pop(len(maze[i])-1)
+                #i+=1
 
             #Original maze (without walls)
             np_maze = np.array(maze)
@@ -280,6 +283,7 @@ class DataHandler(mp.ModelParameter):
                 try:
                     agent_locations.append([tmp[0],tmp[1]])
                 except:pass
+            
 
             #Plane for agent's initial position
             np_agent_S = np.where(np_maze == 'S', 1, 0).astype(np.int8)
@@ -399,7 +403,7 @@ class DataHandler(mp.ModelParameter):
                 # DEPTH = 31 layers = 1 (obstacle) +  5 (agent initial position) + 5*5 (actions)
                 np_tensor = np.dstack((np_obstacles,np_agent_S,np_agent_A,np_agent_B,np_agent_C,np_agent_D,np_actions_S,np_actions_A,np_actions_B,np_actions_C,np_actions_D))
                 steps.append(np_tensor)
-                output = np.array(steps)
+            #output = np.array(steps)
 
             #The last tensor of every trajectory will be the position of the goal.
             np_actions_S = np.zeros((12,12,len(possible_actions)), dtype=np.int8)
@@ -407,11 +411,27 @@ class DataHandler(mp.ModelParameter):
             np_actions_B = np.zeros((12,12,len(possible_actions)), dtype=np.int8)
             np_actions_C = np.zeros((12,12,len(possible_actions)), dtype=np.int8)
             np_actions_D = np.zeros((12,12,len(possible_actions)), dtype=np.int8)
-            np_actions_S[int(agent_locations[-5][1])-1, int(agent_locations[-5][0])-1, possible_actions.index('goal')] = 1                        
-            np_actions_A[int(agent_locations[-4][1])-1, int(agent_locations[-4][0])-1, possible_actions.index('goal')] = 1                        
-            np_actions_B[int(agent_locations[-3][1])-1, int(agent_locations[-3][0])-1, possible_actions.index('goal')] = 1                        
-            np_actions_C[int(agent_locations[-2][1])-1, int(agent_locations[-2][0])-1, possible_actions.index('goal')] = 1            
-            np_actions_D[int(agent_locations[-1][1])-1, int(agent_locations[-1][0])-1, possible_actions.index('goal')] = 1
+            # print(type(int(agent_locations[-5][1])),agent_locations[-5][1])
+            try:
+                np_actions_S[int(agent_locations[-5][1])-1, int(agent_locations[-5][0])-1, possible_actions.index('goal')] = 1                        
+            except:pass
+            try:
+                np_actions_A[int(agent_locations[-4][1])-1, int(agent_locations[-4][0])-1, possible_actions.index('goal')] = 1                        
+            except:pass
+            try:
+                np_actions_B[int(agent_locations[-3][1])-1, int(agent_locations[-3][0])-1, possible_actions.index('goal')] = 1                        
+            except:pass
+            try:
+                np_actions_C[int(agent_locations[-2][1])-1, int(agent_locations[-2][0])-1, possible_actions.index('goal')] = 1                        
+            except:pass
+            try:
+                np_actions_D[int(agent_locations[-1][1])-1, int(agent_locations[-1][0])-1, possible_actions.index('goal')] = 1                        
+            except:pass
+
+            #np_actions_A[int(agent_locations[-4][1])-1, int(agent_locations[-4][0])-1, possible_actions.index('goal')] = 1                        
+            #np_actions_B[int(agent_locations[-3][1])-1, int(agent_locations[-3][0])-1, possible_actions.index('goal')] = 1                        
+            #np_actions_C[int(agent_locations[-2][1])-1, int(agent_locations[-2][0])-1, possible_actions.index('goal')] = 1            
+            #np_actions_D[int(agent_locations[-1][1])-1, int(agent_locations[-1][0])-1, possible_actions.index('goal')] = 1
 
             # For the last step:
             # np_tensor.shape = (12, 12, 11)
@@ -429,11 +449,30 @@ class DataHandler(mp.ModelParameter):
             #label = [0 for _ in range(len(targets))]
             #label[integer_encoded] = 1
             #find agent coordinates
-            #goal=np.zeros((5,5))
-            #for i  in range(-5,0):
-            #    for j in range(-5,0):
-            #        if(agent_locations[i][1]-agent_locations[j][1])**2+(agent_locations[i][0]-agent_locations[j][0])**2 <= 2:
-            #            goal[i][j]=1
+            #generate 5*5 agent status(adjacent or not)
+            goal=np.zeros((5,5))
+            for i  in range(-5,0):
+                for j in range(-5,0):
+                    if(int(agent_locations[i][1])-int(agent_locations[j][1]))**2+(int(agent_locations[i][0])-int(agent_locations[j][0]))**2 <= 2:
+                        goal[i][j]=1
+            
+
+            #take 10 units of the 5*5 to represent status
+            goal_stat=np.zeros(10)
+            l=0
+            for i in range (5):
+                for j in range (i):
+                    goal_stat[l]=goal[j][i]
+                    l+=1
+
+            #change into string
+            goal_stat=goal_stat.astype(int)
+            goal_stat=goal_stat.astype(str)
+            goal_stat="".join(goal_stat)
+
+            #bin to dec
+            label=int(goal_stat,base=2)
+            
             #char_index=dict((n,i) for n,i in np.ndenumerate(goal))
             
             #label=        
@@ -448,6 +487,7 @@ class DataHandler(mp.ModelParameter):
             # contain 10 layers ("np_tensor", 3-dim tensor, shape = (12, 12, 11))
             steps.append(np_tensor)
             output = np.array(steps)
+            # print(output)
 
             # pdb.set_trace()
             pad_size = int(self.MAX_TRAJECTORY_SIZE - output.shape[0])
@@ -466,7 +506,7 @@ class DataHandler(mp.ModelParameter):
                     output = np.delete(output, 0, axis=0)
 
         fp.close()
-        return output
+        return output,label
 
     def parse_query_state(self, filename, with_label = True):
         '''
@@ -497,67 +537,112 @@ class DataHandler(mp.ModelParameter):
         # --------------------------------------------------------------
         #output.shape(12, 12, 6)
         # pdb.set_trace()
+
         with open(filename) as fp:
             lines = list(fp)
-            maze = lines[2:14]
+            maze = lines[8:20]
 
             #Parse maze to 2d array, remove walls.
             i=0
             while i < 12: # in the txt file, each maze has 12 lines
+                maze[i]=maze[i][7:19]
                 maze[i]= list(maze[i])
-                maze[i].pop(0)
-                maze[i].pop(len(maze[i])-1)
-                maze[i].pop(len(maze[i])-1)
                 i+=1
+
+                #maze[i].pop(len(maze[i])-1)
+                #i+=1
 
             #Original maze (without walls)
             np_maze = np.array(maze)
 
             #Plane for obstacles
             np_obstacles = np.where(np_maze == '#', 1, 0).astype(np.int8)
+            
+            #for agent's final coords(if with_label)
+            agent_coords = lines[27:]
+            agent_locations =[]
+            for i in agent_coords:
+                i = i[2:8]
+                tmp = i.split(".")
+                try:
+                    agent_locations.append([tmp[0],tmp[1]])
+                except:pass
+                                   
 
             #Plane for agent's initial position
-            np_agent = np.where(np_maze == 'S', 1, 0).astype(np.int8)
+            np_agent_S = np.where(np_maze == 'S', 1, 0).astype(np.int8)
+            np_agent_A = np.where(np_maze == 'A', 1, 0).astype(np.int8)
+            np_agent_B = np.where(np_maze == 'B', 1, 0).astype(np.int8)
+            np_agent_C = np.where(np_maze == 'C', 1, 0).astype(np.int8)
+            np_agent_D = np.where(np_maze == 'D', 1, 0).astype(np.int8)
+
+
+        # with open(filename) as fp:
+            # lines = list(fp)
+            # maze = lines[2:14]
+
+            # #Parse maze to 2d array, remove walls.
+            # i=0
+            # while i < 12: # in the txt file, each maze has 12 lines
+            #     maze[i]= list(maze[i])
+            #     maze[i].pop(0)
+            #     maze[i].pop(len(maze[i])-1)
+            #     maze[i].pop(len(maze[i])-1)
+            #     i+=1
+
+            #Original maze (without walls)
+            # np_maze = np.array(maze)
+
+            #Plane for obstacles
+            # np_obstacles = np.where(np_maze == '#', 1, 0).astype(np.int8)
+
+            #Plane for agent's initial position
+            # np_agent = np.where(np_maze == 'S', 1, 0).astype(np.int8)
 
             #Planes for each possible goal
-            #targets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m']
-            targets = ['A','B','C','D'] # for the simplified 4-targets mazes
-            np_targets = np.repeat(np_maze[:, :, np.newaxis], len(targets), axis=2)
-            for target, i in zip(targets, range(len(targets))):
-                np_targets[:,:,i] = np.where(np_maze == target, 1, 0)
-            # np_targets.shape = (12, 12, 4)
-            np_targets = np_targets.astype(int)
+            # #targets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m']
+            # targets = ['A','B','C','D'] # for the simplified 4-targets mazes
+            # np_targets = np.repeat(np_maze[:, :, np.newaxis], len(targets), axis=2)
+            # for target, i in zip(targets, range(len(targets))):
+            #     np_targets[:,:,i] = np.where(np_maze == target, 1, 0)
+            # # np_targets.shape = (12, 12, 4)
+            # np_targets = np_targets.astype(int)
 
             # For each trajectory:
             # np_query_state_tensor.shape = (12, 12, 6)
             # DEPTH = 11 layers = 1 (obstacle) + 4 (targets) + 1 (agent initial position)
-            np_query_state_tensor = np.dstack((np_obstacles,np_targets,np_agent))
+            np_query_state_tensor = np.dstack((np_obstacles,np_agent_S,np_agent_A,np_agent_B,np_agent_C,np_agent_D))
 
             if with_label:
+                
               # --------------------------------------------------------------
               # Retrieve the final target (could be training_label, valid_label, testing_label):
-              # size = 1, an int from 0 to 3
+              # size = 1, an int from 0 to 3 ??
               # --------------------------------------------------------------
-              #Parse trajectory into 2d array
-              # pdb.set_trace()
-              trajectory = lines[15:]
-              agent_locations = []
-              for i in trajectory:
-                  i = i[1:len(i)-2]
-                  tmp = i.split(",")
-                  try:
-                      agent_locations.append([tmp[0],tmp[1]])
-                  except:pass
 
-              # Make the label from the letter in the final position of the agent
-              goal = np_maze[int(agent_locations[-1][1])-1][int(agent_locations[-1][0])-1]
-              char_to_int = dict((c, i) for i, c in enumerate(targets))
-              integer_encoded = char_to_int[goal]
-              #label = [0 for _ in range(len(targets))]
-              #label[integer_encoded] = 1
+                goal=np.zeros((5,5))
+                for i  in range(-5,0):
+                    for j in range(-5,0):
+                        if(int(agent_locations[i][1])-int(agent_locations[j][1]))**2+(int(agent_locations[i][0])-int(agent_locations[j][0]))**2 <= 2:
+                            goal[i][j]=1
+            
 
-              #Return label as a number
-              label = int(integer_encoded)
+                #take 10 units of the 5*5 to represent status
+                goal_stat=np.zeros(10)
+                l=0
+                for i in range (5):
+                    for j in range (i):
+                        goal_stat[l]=goal[j][i]
+                        l+=1
+
+                #change into string
+                goal_stat=goal_stat.astype(int)
+                goal_stat=goal_stat.astype(str)
+                goal_stat="".join(goal_stat)
+
+                #bin to dec
+                label=int(goal_stat,base=2)
+
             else:
               # --------------------------------------------------------------
               # When there is no label in the query state file.
