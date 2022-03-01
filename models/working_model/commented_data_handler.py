@@ -538,6 +538,10 @@ class DataHandler(mp.ModelParameter):
         #output.shape(12, 12, 6)
         # pdb.set_trace()
 
+
+
+
+
         with open(filename) as fp:
             lines = list(fp)
             maze = lines[8:20]

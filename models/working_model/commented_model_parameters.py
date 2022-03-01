@@ -12,7 +12,7 @@ class ModelParameter:
     MAZE_HEIGHT = 12 # height of the maze 
     
     # MAZE_DEPTH_TRAJECTORY = number of channels of each step in a trajectory
-    # 26 = 1 (obstacle) + 5 (targets) + 5*5 (actions)
+    # 31 = 1 (obstacle) + 5 (targets) + 5*5 (actions)
     # in our model, 5 actions: up/down/left/right/goal
     # in the paper, also 5 actions: up/down/left/right/stay
     MAZE_DEPTH_TRAJECTORY = 31
@@ -34,7 +34,7 @@ class ModelParameter:
     # Initial learning rate (LR) # paper: 10−4
     INIT_LR = 0.0001  
     # number of unique classes in the training set
-    NUM_CLASS = 4 
+    NUM_CLASS = 1024 
     # the length for thr character embedding
     LENGTH_E_CHAR = 8
 

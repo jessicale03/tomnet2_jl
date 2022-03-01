@@ -39,7 +39,7 @@ class Model(mp.ModelParameter):
   # Constant: Training parameters
   # --------------------------------------
   #Batch size = 16, same in the paper A.3.1. EXPERIMENT 1: SINGLE PAST MDP)
-  BATCH_SIZE = 2
+  BATCH_SIZE = 1
   # BATCH_SIZE = 10 # for human data with less than 160 files
   BATCH_SIZE_TRAIN = BATCH_SIZE # size of the batch for traning (number of the steps within each batch)
   BATCH_SIZE_VAL = BATCH_SIZE # size of the batch for validation
@@ -65,14 +65,14 @@ class Model(mp.ModelParameter):
   # --------------------------------------
   path_mode =  os.getcwd()  # Necessary when the output dir and script dir is different
   # for simulation data
-  # ckpt_fname = 'test_on_simulation_data/training_result/caches/cache_S003b_v24_commit_?'
-  # train_fname = 'test_on_simulation_data/training_result/caches/cache_S003b_v24_commit_?'
-  # path_txt_data ='../../data/data_simulation/S003b/'
+  # ckpt_fname = 'test_on_simulation_data/training_result/caches/cache_dS001_v99_commit_?'
+  # train_fname = 'test_on_simulation_data/training_result/caches/cache_dS001_v99_commit_?'
+  # path_txt_data ='../../data/data_simulation/dS001/'
 
-  # for human data
+  # for **human/simulation data
   #use panda df to store these values
-  path_ckpt = os.path.join('test_on_human_data','training_result','caches')
-  path_train = os.path.join('test_on_human_data','training_result','caches')
+  path_ckpt = os.path.join('test_on_simulation_data','training_result','caches')
+  path_train = os.path.join('test_on_simulation_data','training_result','caches')
   path_txt_data = os.path.join('..','..','data','data_dynamic')
 
   path_ckpt = os.path.join(path_mode,path_ckpt)
@@ -88,13 +88,13 @@ class Model(mp.ModelParameter):
     # --------------------------------------------------------------
     path_ckpt = \
     os.path.join(self.path_ckpt,\
-                 self.TRAINING_VERSION  + '_commit_xxx',\
-                 args.subj_name)
+                 self.TRAINING_VERSION  + '_commit_xxx')#,\
+                 #args.subj_name)
 
     path_train = \
     os.path.join(self.path_ckpt,\
-                 self.TRAINING_VERSION + '_commit_xxx',\
-                 args.subj_name)
+                 self.TRAINING_VERSION + '_commit_xxx') #,\
+                 #args.subj_name)
 
     # create the path if not yet existed
     if not os.path.exists(path_ckpt):
@@ -403,6 +403,7 @@ class Model(mp.ModelParameter):
 #          summary_writer.flush()
 #
 #        else:
+        #pdb.set_trace()
         _, validation_error_value, validation_loss_value = sess.run([self.val_op, self.vali_top1_error, self.vali_loss],\
                                                                     {self.vali_data_traj_placeholder: vali_batch_data_traj,\
                                                                      self.vali_final_target_placeholder: vali_batch_labels_traj,\

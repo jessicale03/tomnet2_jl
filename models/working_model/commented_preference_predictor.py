@@ -42,11 +42,12 @@ class PreferencePredictor(mp.ModelParameter):
   # Constant: For making predictions
   # --------------------------------------
   # param
-  BATCH_SIZE_PREDICT = 16
-  SUBSET_SIZE = 96
+  BATCH_SIZE_PREDICT = 1
+  SUBSET_SIZE = 20
   BREAK_CORRESPONDENCE = True # This should be True when using the same set of files for both trajectory and query state data to avoid overestimating the accuracy.
-  VERSION = 'Traj_S003b_Query_Stest_subset96'
+  VERSION = 'Traj_dS001_Query_Stest'
   WITH_LABEL = False # whether the query state has final target label
+#  WITH_LABEL = True
 #  VERSION = 'Traj_S003b_Query_S003b_subset96'
   # dir
   DIR_PREDICTION_ROOT = os.getcwd() # the script dir
@@ -62,12 +63,12 @@ class PreferencePredictor(mp.ModelParameter):
 
   # For simulation data-----------
   DIR_PREDICTION_DATA_TRAJECTORY = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
-                                                 'data','data_simulation','S003b')
+                                                 'data','data_dynamic','dS001')
 #  DIR_PREDICTION_DATA_QUERY_STATE = DIR_PREDICTION_DATA_TRAJECTORY
   DIR_PREDICTION_DATA_QUERY_STATE = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
                                                 'data','data_preference_predictions',\
-                                                'query_state')
-  DIR_MODEL = 'test_on_simulation_data/training_result/caches/cache_S003b_v24_commit_014d79'
+                                                'd_query')
+  DIR_MODEL = 'test_on_simulation_data/training_result/caches/v99_commit_xxx'
   # --------------------
 
   DIR_MODEL_PREDICTION_RESULT_ROOT = os.path.join(DIR_MODEL,'prediction')
@@ -78,7 +79,7 @@ class PreferencePredictor(mp.ModelParameter):
     os.makedirs(DIR_MODEL_PREDICTION_RESULT_THIS_VERSION)
 
   # file
-  FILE_MODEL_CKPT = os.path.join(DIR_MODEL,'train','model.ckpt-9999')
+  FILE_MODEL_CKPT = os.path.join(DIR_MODEL,'train','model.ckpt-19')
   #FILE_MODEL_CKPT = 'test_on_simulation_data/training_result/caches/cache_S030_v16_commit_926291_epoch80000_tuning_batch96_train_step_1K_INIT_LR_10-4/train/model.ckpt-999'
 
   def __init__(self):
@@ -335,8 +336,10 @@ class PreferencePredictor(mp.ModelParameter):
       :files_prediction_query_state:
         the query state files used for making predictions (num_batch * batch_size).
     '''
-    # pdb.set_trace()
+    #pdb.set_trace()
     # Number of files for making predictions
+    # print(len(files_total_traj))
+    # print(len(files_total_query_state))
     assert len(files_total_traj) == len(files_total_query_state)
 
     num_files_total = len(files_total_traj)
@@ -515,6 +518,8 @@ class PreferencePredictor(mp.ModelParameter):
     # collect the predictions
     # --------------------------------------------------------------
     # the predictions about the final targets
+    #pdb.set_trace()
+    
     correctness = np.equal(self.data_set_ground_truth_labels,\
                            self.data_set_predicted_labels)
 
@@ -524,8 +529,8 @@ class PreferencePredictor(mp.ModelParameter):
                                                        'final_target_predicted_labels': self.data_set_predicted_labels,\
                                                        'correctness': correctness.astype(int)})
     # the frequncey of predictions the ground truth labels for each target
-    # pdb.set_trace()
-    df_proportion_prediction_and_ground_truth_labels = pd.DataFrame(data = {'targets': range(0,4),\
+    #pdb.set_trace()
+    df_proportion_prediction_and_ground_truth_labels = pd.DataFrame(data = {'targets': range(0,1024),\
                                                                            'ground_truth_label_proportion': self.ground_truth_label_proportion,\
                                                                            'prediction_proportion': self.prediction_proportion,\
                                                                            'avg_prediction_probability': self.averaged_predicted_probability,\
