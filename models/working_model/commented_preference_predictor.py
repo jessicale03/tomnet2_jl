@@ -42,11 +42,11 @@ class PreferencePredictor(mp.ModelParameter):
   # Constant: For making predictions
   # --------------------------------------
   # param
-  BATCH_SIZE_PREDICT = 1
-  SUBSET_SIZE = 20
+  BATCH_SIZE_PREDICT = 16
+  SUBSET_SIZE = 300
   BREAK_CORRESPONDENCE = True # This should be True when using the same set of files for both trajectory and query state data to avoid overestimating the accuracy.
-  VERSION = 'Traj_dS001_Query_Stest'
-  WITH_LABEL = False # whether the query state has final target label
+  VERSION = 'Traj_dS002_Query_dS002'
+  WITH_LABEL = True # whether the query state has final target label
 #  WITH_LABEL = True
 #  VERSION = 'Traj_S003b_Query_S003b_subset96'
   # dir
@@ -63,15 +63,19 @@ class PreferencePredictor(mp.ModelParameter):
 
   # For simulation data-----------
   DIR_PREDICTION_DATA_TRAJECTORY = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
-                                                 'data','data_dynamic','dS001')
+                                                 'data','data_dynamic','dS002')
 #  DIR_PREDICTION_DATA_QUERY_STATE = DIR_PREDICTION_DATA_TRAJECTORY
+  # DIR_PREDICTION_DATA_QUERY_STATE = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
+  #                                               'data','data_preference_predictions',\
+  #                                               'd_query')
+      
   DIR_PREDICTION_DATA_QUERY_STATE = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
-                                                'data','data_preference_predictions',\
-                                                'd_query')
-  DIR_MODEL = 'test_on_simulation_data/training_result/caches/v99_commit_xxx'
+                                                'data','data_dynamic','dS002')
+
+  DIR_MODEL = 'test_on_simulation_data/training_result/caches/v99_commit_train_on_server_2'
   # --------------------
 
-  DIR_MODEL_PREDICTION_RESULT_ROOT = os.path.join(DIR_MODEL,'prediction')
+  DIR_MODEL_PREDICTION_RESULT_ROOT = os.path.join(DIR_MODEL,'prediction_300')
   DIR_MODEL_PREDICTION_RESULT_THIS_VERSION = \
   os.path.join( DIR_MODEL_PREDICTION_RESULT_ROOT,VERSION)
 
@@ -79,7 +83,7 @@ class PreferencePredictor(mp.ModelParameter):
     os.makedirs(DIR_MODEL_PREDICTION_RESULT_THIS_VERSION)
 
   # file
-  FILE_MODEL_CKPT = os.path.join(DIR_MODEL,'train','model.ckpt-19')
+  FILE_MODEL_CKPT = os.path.join(DIR_MODEL,'train','model.ckpt-9999')
   #FILE_MODEL_CKPT = 'test_on_simulation_data/training_result/caches/cache_S030_v16_commit_926291_epoch80000_tuning_batch96_train_step_1K_INIT_LR_10-4/train/model.ckpt-999'
 
   def __init__(self):
@@ -98,7 +102,7 @@ class PreferencePredictor(mp.ModelParameter):
     self.prediction_data_trajectory, self.prediction_data_ground_truth_labels_traj, self.files_total_traj = \
     preference_predictor.parse_prediction_data_trajectory(directory = preference_predictor.DIR_PREDICTION_DATA_TRAJECTORY,\
                                                           subset_size = preference_predictor.SUBSET_SIZE)
-
+    # pdb.set_trace()
     if self.WITH_PREDNET:
       # --------------------------------------------------------------
       # model with both charnet and prednet
@@ -111,16 +115,16 @@ class PreferencePredictor(mp.ModelParameter):
                                                              with_label = self.WITH_LABEL)
       # ground truth labels for the final targets
       self.final_target_ground_truth_labels = self.prediction_data_ground_truth_labels_query_state
-
-    else:
-      # --------------------------------------------------------------
-      # model with only charnet
-      # --------------------------------------------------------------
-      self.prediction_data_query_state = np.full((len(self.prediction_data_query_state),),\
-                                                 np.nan)
-      # ground truth labels for the final targets
-      self.final_target_ground_truth_labels = self.prediction_data_ground_truth_labels_traj
-
+ 
+    # else:
+    #   # --------------------------------------------------------------
+    #   # model with only charnet
+    #   # --------------------------------------------------------------
+    #   self.prediction_data_query_state = np.full((len(self.prediction_data_query_state),),\
+    #                                              np.nan)
+    #   # ground truth labels for the final targets
+    #   self.final_target_ground_truth_labels = self.prediction_data_ground_truth_labels_traj
+    # pdb.set_trace()
   def parse_prediction_data_trajectory(self, directory, subset_size = -1):
     '''
     This function wil parse all the prediction files in the directory and return
@@ -147,7 +151,9 @@ class PreferencePredictor(mp.ModelParameter):
     self.parse_prediction_data_subset(directory,\
                                parse_query_state = False,\
                                subset_size = subset_size)
+        
 
+    # pdb.set_trace()
     return prediction_data_trajectory, prediction_data_ground_truth_labels_traj, files_total_traj
 
   def parse_prediction_data_query_state(self, directory, subset_size = -1, break_correspondence = False, with_label = True):
@@ -183,6 +189,8 @@ class PreferencePredictor(mp.ModelParameter):
                                parse_query_state = True,\
                                subset_size = subset_size,\
                                with_label = with_label)
+    # pdb.set_trace()
+
     if break_correspondence:
       # random_state = 0 -> Make the result reproducible
       prediction_data_query_state,\
@@ -241,6 +249,7 @@ class PreferencePredictor(mp.ModelParameter):
           files_prediction = files_prediction[0:subset_size]
     # --------------------------------------
     # Print out parsing message
+    # pdb.set_trace()
     # --------------------------------------
     if not parse_query_state:
       parse_mode = 'trajectories---------------'
@@ -256,6 +265,8 @@ class PreferencePredictor(mp.ModelParameter):
                                                                      files_prediction,\
                                                                      parse_query_state = parse_query_state,\
                                                                      with_label = with_label)
+    # pdb.set_trace()
+    # self.ground_truth_labels = [0]
     return prediction_data, ground_truth_labels, files_prediction
 
   def predict_preferences(self):
@@ -518,10 +529,51 @@ class PreferencePredictor(mp.ModelParameter):
     # collect the predictions
     # --------------------------------------------------------------
     # the predictions about the final targets
-    #pdb.set_trace()
+    # pdb.set_trace()
+    #change self.data_set_ground_truth_labels type from float to int
+    data_set_ground_truth_labels = []
+    for i in range(len(self.data_set_ground_truth_labels)):
+        data_set_ground_truth_labels.append(int(self.data_set_ground_truth_labels[i]))
+
+
+    # decimal into binary then sum up the binary 'vectors' 
+    #ground truth
+    bin_data_set_ground_truth_labels = []
+
+    for i in range(len(data_set_ground_truth_labels)):
+        bin_data_set_ground_truth_labels.append(\
+        bin(data_set_ground_truth_labels[i]).replace("0b", ""))
+
+    sum_bin_data_set_ground_truth_labels = np.zeros(10)
+    for i in range(len(bin_data_set_ground_truth_labels)):
+        for j in range(-1,-11,-1):    #bin max has 10 digits and always a N(atural number)
+            try:
+                sum_bin_data_set_ground_truth_labels[j] += int(bin_data_set_ground_truth_labels[i][j])
+            except:pass
+    
+    #prediction    
+    bin_data_set_predicted_labels = []
+    
+    for i in range(len(self.data_set_predicted_labels)):
+        bin_data_set_predicted_labels.append(\
+        bin(self.data_set_predicted_labels[i]).replace("0b", ""))
+
+    sum_bin_data_set_predicted_labels = np.zeros(10)
+    for i in range(len(bin_data_set_predicted_labels)):
+        for j in range(-1,-11,-1):    #bin max has 10 digits
+            try:
+                sum_bin_data_set_predicted_labels[j] += int(bin_data_set_predicted_labels[i][j])
+            except:pass
+            
+    #pdb.set_trace() 
+           
+
     
     correctness = np.equal(self.data_set_ground_truth_labels,\
-                           self.data_set_predicted_labels)
+                            self.data_set_predicted_labels)
+
+    
+
 
     df_final_target_predictions = pd.DataFrame(data = {'files_trajectory': self.files_prediction_traj,\
                                                        'files_query_state': self.files_prediction_query_state,\
@@ -529,15 +581,19 @@ class PreferencePredictor(mp.ModelParameter):
                                                        'final_target_predicted_labels': self.data_set_predicted_labels,\
                                                        'correctness': correctness.astype(int)})
     # the frequncey of predictions the ground truth labels for each target
-    #pdb.set_trace()
-    df_proportion_prediction_and_ground_truth_labels = pd.DataFrame(data = {'targets': range(0,1024),\
-                                                                           'ground_truth_label_proportion': self.ground_truth_label_proportion,\
-                                                                           'prediction_proportion': self.prediction_proportion,\
-                                                                           'avg_prediction_probability': self.averaged_predicted_probability,\
-                                                                           'ground_truth_label_count': self.ground_truth_label_count,\
-                                                                           'prediction_count': self.prediction_count,\
-                                                                           'accuracy_data_set': np.round((sum(correctness)/len(correctness))*100,2)
-                                                                           })
+    # pdb.set_trace()
+    # df_proportion_prediction_and_ground_truth_labels = pd.DataFrame(data = {'targets': range(0,1024),\
+    #                                                                        'ground_truth_label_proportion': self.ground_truth_label_proportion,\
+    #                                                                        'prediction_proportion': self.prediction_proportion,\
+    #                                                                        'avg_prediction_probability': self.averaged_predicted_probability,\
+    #                                                                        'ground_truth_label_count': self.ground_truth_label_count,\
+    #                                                                        'prediction_count': self.prediction_count
+    #                                                                        # 'accuracy_data_set': np.round((sum(correctness)/len(correctness))*100,2)
+    #                                                                        })
+        
+    df_prediction_sum_summary = pd.DataFrame(data = {'ground_truth':sum_bin_data_set_ground_truth_labels,\
+                                                     'prediction':sum_bin_data_set_predicted_labels
+                                                     })
     # --------------------------------------------------------------
     # write csv files
     # --------------------------------------------------------------
@@ -547,11 +603,15 @@ class PreferencePredictor(mp.ModelParameter):
     df_final_target_predictions.to_csv(file_name_final_target_predictions)
 
     # the frequncey of predictions the ground truth labels for each target
-    file_name_proportion_prediction_and_ground_truth_labels =\
-    os.path.join(self.DIR_MODEL_PREDICTION_RESULT_THIS_VERSION,\
-                 'proportion_prediction_and_ground_truth_labels.csv')
-    df_proportion_prediction_and_ground_truth_labels.to_csv(file_name_proportion_prediction_and_ground_truth_labels)
+    # file_name_proportion_prediction_and_ground_truth_labels =\
+    # os.path.join(self.DIR_MODEL_PREDICTION_RESULT_THIS_VERSION,\
+    #              'proportion_prediction_and_ground_truth_labels.csv')
+    # df_proportion_prediction_and_ground_truth_labels.to_csv(file_name_proportion_prediction_and_ground_truth_labels)
 
+    # the summary of all the predictions, shows the overall predict result
+    file_name_final_sum_predictions = os.path.join(self.DIR_MODEL_PREDICTION_RESULT_THIS_VERSION,\
+                                                      'final_sum_predictions.csv')
+    df_prediction_sum_summary.to_csv(file_name_final_sum_predictions)
 
 if __name__ == "__main__":
     # reseting the graph is necessary for running the script via spyder or other
