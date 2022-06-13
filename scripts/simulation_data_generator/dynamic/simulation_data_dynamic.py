@@ -32,10 +32,10 @@ from queue import *
 # - param
 FNAME = 'dS001.csv'
 RANDOM_NUM_GOALS = False  # If true, the number of goals will vary across mazes
-VERSION_NAME = 'dS001b'
+VERSION_NAME = 'dS002'
 STEP_TOTAL = 20           # max steps in each maze
-AGENT_NAME = "dS001b_"
-MAZE_TOTAL_PER_AGENT = 8  # MAZE_TOTAL_PER_AGENT*5=total maze amount
+AGENT_NAME = "dS002"
+MAZE_TOTAL_PER_AGENT = 2000  # MAZE_TOTAL_PER_AGENT*5=total maze amount
 # - dir
 DIR_ROOT = os.getcwd()
 DIR_TXT_OUTPUT = os.path.join(DIR_ROOT, '..', '..', '..','data','data_dynamic',\

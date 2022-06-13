@@ -39,7 +39,7 @@ class Model(mp.ModelParameter):
   # Constant: Training parameters
   # --------------------------------------
   #Batch size = 16, same in the paper A.3.1. EXPERIMENT 1: SINGLE PAST MDP)
-  BATCH_SIZE = 1
+  BATCH_SIZE = 16
   # BATCH_SIZE = 10 # for human data with less than 160 files
   BATCH_SIZE_TRAIN = BATCH_SIZE # size of the batch for traning (number of the steps within each batch)
   BATCH_SIZE_VAL = BATCH_SIZE # size of the batch for validation
@@ -49,8 +49,8 @@ class Model(mp.ModelParameter):
   SUBSET_SIZE = -1 # use all files
   # tota number of minibatches used for training
   # (Paper: 2M minibatches, A.3.1. EXPERIMENT 1: SINGLE PAST MDP)
-  TRAIN_STEPS = 20
-  REPORT_FREQ = 1 # the frequency of writing the error to error.csv
+  TRAIN_STEPS = 10000
+  REPORT_FREQ = 100 # the frequency of writing the error to error.csv
   #path_txt_data = os.getcwd() + '/S002a/'
   # TRUE: use the full data set for validation
   # (but this would not be fair because a portion of the data has already been seen)
@@ -58,7 +58,7 @@ class Model(mp.ModelParameter):
   FULL_VALIDATION = False
   USE_CKPT = False
   # the version of the training
-  TRAINING_VERSION = 'v99'
+  TRAINING_VERSION = 'vd01'
 
   # --------------------------------------
   # Variable: Training parameters
@@ -88,12 +88,12 @@ class Model(mp.ModelParameter):
     # --------------------------------------------------------------
     path_ckpt = \
     os.path.join(self.path_ckpt,\
-                 self.TRAINING_VERSION  + '_commit_xxx')#,\
+                 self.TRAINING_VERSION  + '_commit_test_on_server_2')#,\
                  #args.subj_name)
 
     path_train = \
     os.path.join(self.path_ckpt,\
-                 self.TRAINING_VERSION + '_commit_xxx') #,\
+                 self.TRAINING_VERSION + '_commit_test_on_server_2') #,\
                  #args.subj_name)
 
     # create the path if not yet existed
@@ -1010,7 +1010,7 @@ if __name__ == "__main__":
   # Constants
   # --------------------------------------------------------
   # LIST_SUBJECTS = ["S0" + str(i) for i in ["35","50","51","52"]]
-  LIST_SUBJECTS = ["dS001"]
+  LIST_SUBJECTS = ["dS002"]
 
   # LIST_SUBJECTS = ["S0" + str(i) for i in ["24","33","35","50","51","52"]]
 
