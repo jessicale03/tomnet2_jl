@@ -30,13 +30,13 @@ from queue import *
 # --------------------------------------------------------------      
 # Read suject's network
 # - param
-FNAME = 'dS004.csv'
+FNAME = 'dS001.csv'
 RANDOM_NUM_GOALS = False  # If true, the number of goals will vary across mazes
-VERSION_NAME = 'dS004_NEW'
+VERSION_NAME = 'dS001'
 STEP_TOTAL = 20           # max steps in each maze
-AGENT_NAME = "dS004_NEW"
-SET_UP_MAZE_TOTAL = 100  # SET_UP_MAZE_TOTAL=total maze amount
-PRINT_FINAL_MAZE = True
+AGENT_NAME = "dS001"
+SET_UP_MAZE_TOTAL = 9000  # SET_UP_MAZE_TOTAL=total maze amount
+PRINT_FINAL_MAZE = False
 
 # - dir
 DIR_ROOT = os.getcwd()
