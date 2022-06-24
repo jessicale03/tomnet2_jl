@@ -43,9 +43,9 @@ class PreferencePredictor(mp.ModelParameter):
   # --------------------------------------
   # param
   BATCH_SIZE_PREDICT = 16
-  SUBSET_SIZE = 300
+  SUBSET_SIZE = 1000
   BREAK_CORRESPONDENCE = True # This should be True when using the same set of files for both trajectory and query state data to avoid overestimating the accuracy.
-  VERSION = 'Traj_dS002_Query_dS002'
+  VERSION = 'Traj_dS001_Query_dS001'
   WITH_LABEL = True # whether the query state has final target label
 #  WITH_LABEL = True
 #  VERSION = 'Traj_S003b_Query_S003b_subset96'
@@ -63,19 +63,19 @@ class PreferencePredictor(mp.ModelParameter):
 
   # For simulation data-----------
   DIR_PREDICTION_DATA_TRAJECTORY = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
-                                                 'data','data_dynamic','dS002')
+                                                 'data','data_dynamic','dS001')
 #  DIR_PREDICTION_DATA_QUERY_STATE = DIR_PREDICTION_DATA_TRAJECTORY
   # DIR_PREDICTION_DATA_QUERY_STATE = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
   #                                               'data','data_preference_predictions',\
   #                                               'd_query')
       
   DIR_PREDICTION_DATA_QUERY_STATE = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
-                                                'data','data_dynamic','dS002')
+                                                'data','data_dynamic','dS001_pred')
 
-  DIR_MODEL = 'test_on_simulation_data/training_result/caches/v99_commit_train_on_server_2'
+  DIR_MODEL = 'test_on_simulation_data/training_result/caches/cache_dS001_v1_commit_603c34'
   # --------------------
 
-  DIR_MODEL_PREDICTION_RESULT_ROOT = os.path.join(DIR_MODEL,'prediction_300')
+  DIR_MODEL_PREDICTION_RESULT_ROOT = os.path.join(DIR_MODEL,'prediction')
   DIR_MODEL_PREDICTION_RESULT_THIS_VERSION = \
   os.path.join( DIR_MODEL_PREDICTION_RESULT_ROOT,VERSION)
 
@@ -83,7 +83,7 @@ class PreferencePredictor(mp.ModelParameter):
     os.makedirs(DIR_MODEL_PREDICTION_RESULT_THIS_VERSION)
 
   # file
-  FILE_MODEL_CKPT = os.path.join(DIR_MODEL,'train','model.ckpt-9999')
+  FILE_MODEL_CKPT = os.path.join(DIR_MODEL,'train','model.ckpt-8999')
   #FILE_MODEL_CKPT = 'test_on_simulation_data/training_result/caches/cache_S030_v16_commit_926291_epoch80000_tuning_batch96_train_step_1K_INIT_LR_10-4/train/model.ckpt-999'
 
   def __init__(self):

@@ -1,0 +1,3 @@
+model_checkpoint_path: "/home/.bml/Data/Bank1/ToMNET/tomnet-project/tomnet2/tomnet2/models/working_model/test_on_simulation_data/training_result/caches/cache_dS001_v1_commit_603c34/train/model.ckpt-8999"
+all_model_checkpoint_paths: "/home/.bml/Data/Bank1/ToMNET/tomnet-project/tomnet2/tomnet2/models/working_model/test_on_simulation_data/training_result/caches/cache_dS001_v1_commit_603c34/train/model.ckpt-0"
+all_model_checkpoint_paths: "/home/.bml/Data/Bank1/ToMNET/tomnet-project/tomnet2/tomnet2/models/working_model/test_on_simulation_data/training_result/caches/cache_dS001_v1_commit_603c34/train/model.ckpt-8999"

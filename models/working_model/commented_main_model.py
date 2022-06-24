@@ -49,7 +49,7 @@ class Model(mp.ModelParameter):
   SUBSET_SIZE = -1 # use all files
   # tota number of minibatches used for training
   # (Paper: 2M minibatches, A.3.1. EXPERIMENT 1: SINGLE PAST MDP)
-  TRAIN_STEPS = 10000
+  TRAIN_STEPS = 9000
   REPORT_FREQ = 100 # the frequency of writing the error to error.csv
   #path_txt_data = os.getcwd() + '/S002a/'
   # TRUE: use the full data set for validation
@@ -58,7 +58,7 @@ class Model(mp.ModelParameter):
   FULL_VALIDATION = False
   USE_CKPT = False
   # the version of the training
-  TRAINING_VERSION = 'vd01'
+  TRAINING_VERSION = 'v1'
 
   # --------------------------------------
   # Variable: Training parameters
@@ -88,12 +88,12 @@ class Model(mp.ModelParameter):
     # --------------------------------------------------------------
     path_ckpt = \
     os.path.join(self.path_ckpt,\
-                 self.TRAINING_VERSION  + '_commit_test_on_server_2')#,\
+                 'cache_dS001_v1_commit_603c34')#,\
                  #args.subj_name)
 
     path_train = \
     os.path.join(self.path_ckpt,\
-                 self.TRAINING_VERSION + '_commit_test_on_server_2') #,\
+                 'cache_dS001_v1_commit_603c34') #,\
                  #args.subj_name)
 
     # create the path if not yet existed
@@ -1010,7 +1010,7 @@ if __name__ == "__main__":
   # Constants
   # --------------------------------------------------------
   # LIST_SUBJECTS = ["S0" + str(i) for i in ["35","50","51","52"]]
-  LIST_SUBJECTS = ["dS002"]
+  LIST_SUBJECTS = ["dS001"]
 
   # LIST_SUBJECTS = ["S0" + str(i) for i in ["24","33","35","50","51","52"]]
 
