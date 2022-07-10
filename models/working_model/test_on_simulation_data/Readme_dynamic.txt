@@ -24,6 +24,11 @@ https://danijar.com/variable-sequence-lengths-in-tensorflow/
 (3) Reconsider the data format of 'data_preference_predictions'. Maybe I should try more combination?
 (4)
 ########################################
+v1(previous training)
+With dS005~dS104 social preference
+based on this prediction requirement, I modified commented_preference_predictor.py code into commented_preference_predictor_query.py and also /tomnet2/scripts/simulation_data_generator/dynamic/simulation_data_dynamic.py
+(commit )
+########################################
 Finished training session (v1,commit 603c34)
 Time: 2022/06/22
 Author: Elaine

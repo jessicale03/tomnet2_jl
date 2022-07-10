@@ -10,3 +10,6 @@ Agents preference generator:
 generate_social_score.py
 (Social Score ranges from -30 to 30)
 
+dS002~dS004 are extreme cases
+
+dS005~dS104 are for prediction tests
