@@ -33,9 +33,9 @@ import pdb
 
 
 START = 5 #the start number of dS00X for being query set
-END = 7 #the end number of dS00X for being query set
+END = 104 #the end number of dS00X for being query set
 index = 0
-VERSION = 'Traj_dS001_pred_Query_dS005-7'
+VERSION = 'Traj_dS001_pred_Query_dS005-104'
 
 #dir
 DIR_PREDICTION_ROOT = os.getcwd() # the script dir
@@ -59,7 +59,7 @@ class PreferencePredictor(mp.ModelParameter):
   # --------------------------------------
   # param
   BATCH_SIZE_PREDICT = 16
-  SUBSET_SIZE = 100
+  SUBSET_SIZE = 1000
   BREAK_CORRESPONDENCE = True # This should be True when using the same set of files for both trajectory and query state data to avoid overestimating the accuracy.
   # VERSION = 'Traj_dS001_pred_Query_dS00_pred'
   WITH_LABEL = True # whether the query state has final target label

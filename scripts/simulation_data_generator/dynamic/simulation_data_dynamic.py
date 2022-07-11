@@ -35,7 +35,7 @@ RANDOM_NUM_GOALS = False  # If true, the number of goals will vary across mazes
 VERSION_NAME = 'dS00X_pred'
 STEP_TOTAL = 20           # max steps in each maze
 AGENT_NAME = "dS00X"
-SET_UP_MAZE_TOTAL = 100  # SET_UP_MAZE_TOTAL=total maze amount
+SET_UP_MAZE_TOTAL = 1000  # SET_UP_MAZE_TOTAL=total maze amount
 PRINT_FINAL_MAZE = False
 
 # - dir
@@ -65,7 +65,7 @@ with open(FNAME, encoding='utf-8') as csvfile:
 #if generating lots of different social preference maze at once
 index = 0
 start = 5
-end = 7
+end = 104
 
 n_chosen_agents = 5
 n_move_agents = n_chosen_agents-1
