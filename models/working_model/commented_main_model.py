@@ -88,12 +88,12 @@ class Model(mp.ModelParameter):
     # --------------------------------------------------------------
     path_ckpt = \
     os.path.join(self.path_ckpt,\
-                 'cache_dS0078_v1_commit_858b36')#,\
+                 'cache_dS0054_v1_commit_')#,\
                  #args.subj_name)
 
     path_train = \
     os.path.join(self.path_ckpt,\
-                 'cache_dS0078_v1_commit_858b36') #,\
+                 'cache_dS0054_v1_commit_') #,\
                  #args.subj_name)
 
     # create the path if not yet existed
@@ -1010,7 +1010,7 @@ if __name__ == "__main__":
   # Constants
   # --------------------------------------------------------
   # LIST_SUBJECTS = ["S0" + str(i) for i in ["35","50","51","52"]]
-  LIST_SUBJECTS = ["dS0078"]
+  LIST_SUBJECTS = ["dS0054"]
 
   # LIST_SUBJECTS = ["S0" + str(i) for i in ["24","33","35","50","51","52"]]
 
