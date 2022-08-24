@@ -45,7 +45,7 @@ class PreferencePredictor(mp.ModelParameter):
   BATCH_SIZE_PREDICT = 16
   SUBSET_SIZE = 1000
   BREAK_CORRESPONDENCE = True # This should be True when using the same set of files for both trajectory and query state data to avoid overestimating the accuracy.
-  VERSION = 'Traj_dS0078_pred_Query_dS0078_pred'
+  VERSION = 'Traj_dS0054_pred_Query_dS0054_pred'
   WITH_LABEL = True # whether the query state has final target label
 #  WITH_LABEL = True
 #  VERSION = 'Traj_S003b_Query_S003b_subset96'
@@ -63,16 +63,16 @@ class PreferencePredictor(mp.ModelParameter):
 
   # For simulation data-----------
   DIR_PREDICTION_DATA_TRAJECTORY = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
-                                                 'data','data_dynamic','dS0078_pred')
+                                                 'data','data_dynamic','dS0054_pred')
 #  DIR_PREDICTION_DATA_QUERY_STATE = DIR_PREDICTION_DATA_TRAJECTORY
   # DIR_PREDICTION_DATA_QUERY_STATE = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
   #                                               'data','data_preference_predictions',\
   #                                               'd_query')
       
   DIR_PREDICTION_DATA_QUERY_STATE = os.path.join(DIR_PREDICTION_ROOT,'..','..',\
-                                                'data','data_dynamic','dS0078_pred')
+                                                'data','data_dynamic','dS0054_pred')
 
-  DIR_MODEL = 'test_on_simulation_data/training_result/caches/cache_dS0078_v1_commit_858b36'
+  DIR_MODEL = 'test_on_simulation_data/training_result/caches/cache_dS0054_v1_commit_9cb635'
   # --------------------
 
   DIR_MODEL_PREDICTION_RESULT_ROOT = os.path.join(DIR_MODEL,'prediction')
