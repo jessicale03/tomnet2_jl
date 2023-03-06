@@ -6,3 +6,10 @@ https://docs.google.com/document/d/1vOaPpZu1qOdUEqzuAotb00ty1p264KmhDILEIKaQU-U/
 
 ## Discord
 https://discord.com/channels/1070259860026957915/1070387486536253490
+
+
+## Contents
+- Need to describe the contents of each file.
+
+## Usage tutorial
+- Need to provide a tutorial on how to use the code above.
