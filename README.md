@@ -20,3 +20,7 @@ https://discord.com/channels/1070259860026957915/1070387486536253490
 >> tomnet()
 >> exit
 ```
+
+## Reference
+Chuang, Y.S., Hung, H.Y., Gamborino E., Goh, O.S., Huang, T.R., Chang, Y.L., Yeh, S.L., Fu,L.C. (2020) Using Machine Theory of Mind to Learn Agent Social Network Structures from Observed Interactive Behaviors with Targets. IEEE, Robot and Human Interactive Communication [url](https://ieeexplore.ieee.org/abstract/document/9223453)
+
