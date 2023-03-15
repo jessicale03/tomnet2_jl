@@ -15,7 +15,7 @@ https://discord.com/channels/1070259860026957915/1070387486536253490
 - Need to describe the contents of each file.
 
 ## Usage tutorial
-- Need to provide a tutorial on how to use the code above. E.g.
+- @Elaine needs to provide a tutorial on how to use the code above. E.g.
 ```
 >> tomnet()
 >> exit
