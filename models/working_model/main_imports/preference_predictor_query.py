@@ -22,12 +22,12 @@ from sklearn.utils import shuffle
 
 #import numpy as np
 #from tensorflow.contrib import rnn
-import commented_main_model as mm
-import commented_model_parameters as mp
-import commented_data_handler as dh
-import commented_charnet as cn
-import commented_prednet as pn
-import commented_batch_generator as bg
+import main_model as mm
+import model_parameters as mp
+import data_handler as dh
+import charnet as cn
+import prednet as pn
+import batch_generator as bg
 # For debugging
 import pdb
 
